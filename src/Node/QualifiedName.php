@@ -85,7 +85,12 @@ class QualifiedName extends Node implements NamespacedNameInterface {
             $this->parent instanceof Node\Statement\NamespaceUseDeclaration ||
             $this->parent instanceof Node\NamespaceUseClause ||
             $this->parent instanceof Node\NamespaceUseGroupClause ||
-            $this->parent->parent instanceof Node\TraitUseClause ||
+            /**
+             * Note:This line doesn't allow QualifiedName  to be resolved  when its parent is a TraitUseClause, so I cannot resolve the elements 
+             * contained in traitNameList array from a node of type ClassDeclaration in its property classMembers->classMemberDeclarations[N]->traitNameList, I need this
+             * to know which traits are being used-imported by the class in order to resolve its methods for autocomplete feacture.
+             */            
+           # $this->parent->parent instanceof Node\TraitUseClause || 
             $this->parent instanceof Node\TraitSelectOrAliasClause ||
             ($this->parent instanceof TraitSelectOrAliasClause &&
             ($this->parent->asOrInsteadOfKeyword == null || $this->parent->asOrInsteadOfKeyword->kind === TokenKind::AsKeyword))
